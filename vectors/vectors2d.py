@@ -1,9 +1,12 @@
+# linalg/vectors/vectors2d.py
+"""A module for working with vectors of two dimensions."""
+
 from __future__ import annotations
 import math
 from ..utils import guards as gd
 from ..utils.guards import NumericTypeError, ScalarLike, Vector2DLike
 
-EPSILON = 1e-6  # close to zero threshold
+EPSILON = 1e-6  # zero threshold
 
 class Vector2D:
     __slots__ = ('x', 'y')
