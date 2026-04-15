@@ -25,7 +25,10 @@ class Vector2D:
             y = gd.to_float(other[1], name=f"{name} y")
             return cls(x, y)
         except (TypeError, IndexError):
-            raise TypeError(f"{name} must be a Vector2D or a tuple of two numbers, not {type(other).__name__}")
+            raise TypeError(
+                f"{name} must be a Vector2D or a tuple of two numbers, \
+                    not {type(other).__name__}"
+            )
 
     def __repr__(self) -> str:
         return f"Vector2D({self.x}, {self.y})"
@@ -58,7 +61,9 @@ class Vector2D:
     def normalize(self) -> Vector2D:
         mag = self.magnitude
         if mag <= EPSILON:
-            raise ValueError(f"Vector magnitude is too small to normalize (<= {EPSILON})!")
+            raise ValueError(
+                f"Vector magnitude is too small to normalize (<= {EPSILON})!"
+            )
         return self / mag
 
     def dot(self, other: Vector2DLike) -> float:
@@ -82,17 +87,26 @@ class Vector2D:
     
     def component_along(self, other: Vector2DLike) -> float:
         """Return the scalar component of `self` along `other`."""
-
         other_vec = self._coerce(other, name="other")
         denom = other_vec.x**2 + other_vec.y**2
         if denom <= EPSILON**2:
-            raise ValueError("Cannot compute component along a near-zero vector!")
+            raise ValueError(
+                "Cannot compute component along a near-zero vector!"
+            )
         return self.dot(other_vec) / math.sqrt(denom)
 
-    def angle_to(self, other: Vector2DLike, *, signed: bool = True, degrees: bool = True) -> float:
+    def angle_to(
+            self,
+            other: Vector2DLike,
+            *,
+            signed: bool = True,
+            degrees: bool = True
+        ) -> float:
         other_vec = self._coerce(other, name="other")
         if self.magnitude <= EPSILON or other_vec.magnitude <= EPSILON:
-            raise ValueError("Cannot compute angle for a zero-magnitude vector!")
+            raise ValueError(
+                "Cannot compute angle for a zero-magnitude vector!"
+            )
 
         dot_prod = self.dot(other_vec)
         cross_prod = self.cross(other_vec)
@@ -107,12 +121,20 @@ class Vector2D:
             
         return math.degrees(angle_rad)
 
-    def angle_between(self, other: Vector2DLike, *, degrees: bool = True) -> float:
+    def angle_between(
+            self,
+            other: Vector2DLike,
+            *,
+            degrees: bool = True
+        ) -> float:
         return self.angle_to(other, signed=False, degrees=degrees)
 
 
 def main():
-    print("Calculate an output vector from two inputs. Separate dimensions with a comma")
+    print(
+        "Calculate an output vector from two inputs. \
+            Separate dimensions with a comma"
+    )
 
     while True:
         vec1_raw = input("> Vector 1: ").strip()

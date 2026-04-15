@@ -11,6 +11,6 @@ def main():
     banner("Composition Validator")
 
     while True:
-        vec1_raw = input("> Vector: ").strip()
-        if vec1_raw.lower() in {"q", "quit", ""}:
+        vec_raw = input("> Vector: ").strip()
+        if vec_raw.lower() in {"q", "quit", ""}:
             break
