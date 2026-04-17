@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from utils.banners import banner
-
 from ..vectors.vectors2d import Vector2D
 from ..utils import guards as gd
 from ..utils.banners import banner
