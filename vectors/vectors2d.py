@@ -121,6 +121,16 @@ class Vector2D:
             
         return math.degrees(angle_rad)
 
+    def rotate(self, angle: float, *, degrees: bool = True) -> Vector2D:
+        """Return a new vector rotated counter-clockwise by `angle`."""
+        theta = math.radians(angle) if degrees else angle
+        cos_t = math.cos(theta)
+        sin_t = math.sin(theta)
+        return Vector2D(
+            self.x * cos_t - self.y * sin_t,
+            self.x * sin_t + self.y * cos_t,
+        )
+
     def angle_between(
             self,
             other: Vector2DLike,
