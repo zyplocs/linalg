@@ -33,6 +33,12 @@ class Vector2D:
     def __repr__(self) -> str:
         return f"Vector2D({self.x}, {self.y})"
 
+    def __abs__(self) -> float:
+        return self.magnitude
+    
+    def __bool__(self) -> bool:
+        return self.magnitude > EPSILON
+
     def __add__(self, other: Vector2DLike) -> Vector2D:
         other_vec = self._coerce(other, name="other")
         return Vector2D(self.x + other_vec.x, self.y + other_vec.y)
