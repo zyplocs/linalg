@@ -39,6 +39,9 @@ class Vector2D:
     def __bool__(self) -> bool:
         return self.magnitude > EPSILON
 
+    def __iter__(self):
+        return iter((self.x, self.y))
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, (Vector2D, tuple)):
             return NotImplemented
