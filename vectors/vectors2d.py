@@ -42,6 +42,9 @@ class Vector2D:
     def __iter__(self):
         return iter((self.x, self.y))
 
+    def __len__(self) -> int:
+        return 2
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, (Vector2D, tuple)):
             return NotImplemented
