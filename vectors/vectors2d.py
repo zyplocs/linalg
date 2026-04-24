@@ -52,9 +52,7 @@ class Vector2D:
             other_vec = self._coerce(other, name="other")
         except TypeError:
             return NotImplemented
-        return (abs(self.x - other_vec.x) <= EPSILON 
-            and abs(self.y - other_vec.y) <= EPSILON
-        )
+        return self.x == other_vec.x and self.y == other_vec.y
 
     def __neg__(self) -> Vector2D:
         return Vector2D(-self.x, -self.y)
