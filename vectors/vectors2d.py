@@ -30,21 +30,6 @@ class Vector2D:
                 f"not {type(other).__name__}"
             )
 
-    def __repr__(self) -> str:
-        return f"Vector2D({self.x}, {self.y})"
-
-    def __abs__(self) -> float:
-        return self.magnitude
-    
-    def __bool__(self) -> bool:
-        return self.magnitude > EPSILON
-
-    def __iter__(self):
-        return iter((self.x, self.y))
-
-    def __len__(self) -> int:
-        return 2
-
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, (Vector2D, tuple)):
             return NotImplemented
@@ -53,6 +38,30 @@ class Vector2D:
         except TypeError:
             return NotImplemented
         return self.x == other_vec.x and self.y == other_vec.y
+
+    def __iter__(self):
+        return iter((self.x, self.y))
+
+    def __repr__(self) -> str:
+        return f"Vector2D({self.x}, {self.y})"
+
+    def __str__(self) -> str:
+        return f"({self.x}, {self.y})"
+
+    def __format__(self, spec: str) -> str:
+        return f"({format(self.x, spec)}, {format(self.y, spec)})"
+
+    def __getitem__(self, index: int) -> float:
+        return (self.x, self.y)[index]
+
+    def __abs__(self) -> float:
+        return self.magnitude
+    
+    def __bool__(self) -> bool:
+        return self.magnitude > EPSILON
+
+    def __len__(self) -> int:
+        return 2
 
     def __neg__(self) -> Vector2D:
         return Vector2D(-self.x, -self.y)
@@ -77,6 +86,9 @@ class Vector2D:
         if abs(scal) < EPSILON:
             raise ValueError("Cannot divide vector by a near-zero scalar!")
         return Vector2D(self.x / scal, self.y / scal)
+
+    def __round__(self, ndigits: int | None = None) -> Vector2D:
+        return Vector2D(round(self.x, ndigits), round(self.y, ndigits))
 
     @property
     def magnitude(self) -> float:
