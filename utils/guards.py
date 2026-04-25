@@ -22,7 +22,10 @@ def to_float(usr_input: SupportsFloat | str, *, name: str) -> float:
 
         floating = float(usr_input)
     except (TypeError, ValueError) as e:
-        raise NumericTypeError(f"{name.capitalize()} must be numeric; got {type(usr_input).__name__}!") from e
+        raise NumericTypeError(
+            f"{name.capitalize()} must be numeric; "
+            f"got {type(usr_input).__name__}!"
+        ) from e
 
     if not isfinite(floating):
         raise ValueError(f"{name} must be finite; got {floating}!")
