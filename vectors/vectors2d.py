@@ -26,8 +26,8 @@ class Vector2D:
             return cls(x, y)
         except (TypeError, IndexError):
             raise TypeError(
-                f"{name} must be a Vector2D or a tuple of two numbers, \
-                    not {type(other).__name__}"
+                f"{name} must be a Vector2D or a tuple of two numbers, "
+                f"not {type(other).__name__}"
             )
 
     def __repr__(self) -> str:
@@ -166,8 +166,8 @@ class Vector2D:
 
 def main():
     print(
-        "Calculate an output vector from two inputs. \
-            Separate dimensions with a comma"
+        "Calculate an output vector from two inputs. "
+        "Separate dimensions with a comma"
     )
 
     while True:
