@@ -83,7 +83,7 @@ class Vector2D:
 
     def __truediv__(self, scalar: ScalarLike) -> Vector2D:
         scal = gd.to_float(scalar, name="scalar")
-        if abs(scal) < EPSILON:
+        if abs(scal) <= EPSILON:
             raise ValueError("Cannot divide vector by a near-zero scalar!")
         return Vector2D(self.x / scal, self.y / scal)
 
@@ -94,21 +94,26 @@ class Vector2D:
     def magnitude(self) -> float:
         return math.hypot(self.x, self.y)
 
+    def dot(self, other: Vector2DLike) -> float:
+        other_vec = self._coerce(other, name="other")
+        return self.x * other_vec.x + self.y * other_vec.y
+
+    def cross(self, other: Vector2DLike) -> float:
+        """
+        2-D scalar cross product; compute the signed area of 
+        the parallelogram formed by `self` and `other`.
+        """
+        other_vec = self._coerce(other, name="other")
+        return self.x * other_vec.y - self.y * other_vec.x
+
     def normalize(self) -> Vector2D:
+        """Return a unit vector in the direction of `self`."""
         mag = self.magnitude
         if mag <= EPSILON:
             raise ValueError(
                 f"Vector magnitude is too small to normalize (<= {EPSILON})!"
             )
         return self / mag
-
-    def dot(self, other: Vector2DLike) -> float:
-        other_vec = self._coerce(other, name="other")
-        return self.x * other_vec.x + self.y * other_vec.y
-
-    def cross(self, other: Vector2DLike) -> float:
-        other_vec = self._coerce(other, name="other")
-        return self.x * other_vec.y - self.y * other_vec.x
     
     def projection_onto(self, other: Vector2DLike) -> Vector2D:
         other_vec = self._coerce(other, name="other")
