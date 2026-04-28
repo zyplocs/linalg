@@ -100,11 +100,12 @@ class Vector2D:
 
     @property
     def polar(self) -> tuple[float, float]:
-        return (self.magnitude, self.theta)
+        return self.magnitude, self.theta
 
     @classmethod
-    def from_polar(cls, mag: float, theta: float) -> Vector2D:
-        return cls(mag * math.cos(theta), mag * math.sin(theta))
+    def from_polar(cls, radius: float, theta: float) -> Vector2D:
+        """Creates a `Vector2D` from polar coordinates (magnitude, angle)."""
+        return cls(radius * math.cos(theta), radius * math.sin(theta))
 
     def dot(self, other: Vector2DLike) -> float:
         other_vec = self._coerce(other, name="other")
