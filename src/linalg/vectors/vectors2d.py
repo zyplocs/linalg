@@ -30,6 +30,7 @@ class Vector2D:
                 f"not {type(other).__name__}"
             )
 
+    ## Dunders
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, (Vector2D, tuple)):
             return NotImplemented
