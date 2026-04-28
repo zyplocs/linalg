@@ -104,7 +104,7 @@ class Vector2D:
 
     @classmethod
     def from_polar(cls, radius: float, theta: float) -> Vector2D:
-        """Creates a `Vector2D` from polar coordinates (magnitude, angle)."""
+        """Creates a `Vector2D` from polar coordinates (r, theta)."""
         return cls(radius * math.cos(theta), radius * math.sin(theta))
 
     def dot(self, other: Vector2DLike) -> float:
