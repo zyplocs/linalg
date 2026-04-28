@@ -94,6 +94,18 @@ class Vector2D:
     def magnitude(self) -> float:
         return math.hypot(self.x, self.y)
 
+    @property
+    def theta(self) -> float:
+        return math.atan2(self.y, self.x)
+
+    @property
+    def polar(self) -> tuple[float, float]:
+        return (self.magnitude, self.theta)
+
+    @classmethod
+    def from_polar(cls, mag: float, theta: float) -> Vector2D:
+        return cls(mag * math.cos(theta), mag * math.sin(theta))
+
     def dot(self, other: Vector2DLike) -> float:
         other_vec = self._coerce(other, name="other")
         return self.x * other_vec.x + self.y * other_vec.y
