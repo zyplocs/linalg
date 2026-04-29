@@ -217,9 +217,9 @@ def main():
             new_mag = new_vec.magnitude
             new_unit_vec = new_vec.normalize()
 
-            print(f"Sum vector: ({new_vec.x:.2f}, {new_vec.y:.2f})")
+            print(f"Sum vector: {new_vec:.2f}")
             print(f"Magnitude: {new_mag:.3f}")
-            print(f"Unit vector: ({new_unit_vec.x:.2f}, {new_unit_vec.y:.2f})")
+            print(f"Unit vector: {new_unit_vec:.2f}")
             break
         except NumericTypeError as e:
             print(f"Input error: {e}")
