@@ -33,20 +33,20 @@ def to_float(usr_input: SupportsFloat | str, *, name: str) -> float:
     return floating
 
 
-def parse_vec2d(s: str, name: str) -> Vector2D:
+def parse_vec2d(raw: str, label: str) -> Vector2D:
     try:
         from ..vectors.vectors2d import Vector2D
     except ImportError:
         from vectors2d import Vector2D
 
-    s = s.strip()
-    if s.startswith("(") and s.endswith(")"):
-        s = s[1:-1]
+    cleaned = raw.strip()
+    if cleaned.startswith("(") and cleaned.endswith(")"):
+        cleaned = cleaned[1:-1]
 
-    dims = [d.strip() for d in s.split(",")]
+    dims = [d.strip() for d in cleaned.split(",")]
     if len(dims) != 2:
-        raise ValueError(f"{name} must be two comma-separated numbers!")
-    x = to_float(dims[0], name=f"{name} x")
-    y = to_float(dims[1], name=f"{name} y")
+        raise ValueError(f"{label} must be two comma-separated numbers!")
+    x = to_float(dims[0], name=f"{label} x")
+    y = to_float(dims[1], name=f"{label} y")
 
     return Vector2D(x, y)
