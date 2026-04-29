@@ -9,6 +9,7 @@ from ..utils.guards import NumericTypeError, ScalarLike, Vector2DLike
 EPSILON = 1e-6  # zero threshold
 
 class Vector2D:
+    """Represent a 2D vector with common operations."""
     __slots__ = ('x', 'y')
     def __init__(self, x: float, y: float):
         self.x = gd.to_float(x, name="x")
@@ -57,7 +58,7 @@ class Vector2D:
 
     def __abs__(self) -> float:
         return self.magnitude
-    
+
     def __bool__(self) -> bool:
         return self.magnitude > EPSILON
 
@@ -128,7 +129,7 @@ class Vector2D:
                 f"Vector magnitude is too small to normalize (<= {EPSILON})!"
             )
         return self / mag
-    
+
     def projection_onto(self, other: Vector2DLike) -> Vector2D:
         other_vec = self._coerce(other, name="other")
         denom = other_vec.x**2 + other_vec.y**2
@@ -139,7 +140,7 @@ class Vector2D:
 
     def rejection_from(self, other: Vector2DLike) -> Vector2D:
         return self - self.projection_onto(other)
-    
+
     def component_along(self, other: Vector2DLike) -> float:
         """Return the scalar component of `self` along `other`."""
         other_vec = self._coerce(other, name="other")
@@ -170,10 +171,10 @@ class Vector2D:
             angle_rad = math.atan2(cross_prod, dot_prod)
         else:
             angle_rad = math.atan2(abs(cross_prod), dot_prod)
-        
+
         if not degrees:
             return angle_rad
-            
+
         return math.degrees(angle_rad)
 
     def rotate(self, angle: float, *, degrees: bool = True) -> Vector2D:
