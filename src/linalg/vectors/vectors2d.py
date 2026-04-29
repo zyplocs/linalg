@@ -25,11 +25,11 @@ class Vector2D:
             x = gd.to_float(other[0], name=f"{name} x")
             y = gd.to_float(other[1], name=f"{name} y")
             return cls(x, y)
-        except (TypeError, IndexError):
+        except (TypeError, IndexError) as exc:
             raise TypeError(
                 f"{name} must be a Vector2D or a tuple of two numbers, "
                 f"not {type(other).__name__}"
-            )
+            ) from exc
 
     ## Dunders
     def __eq__(self, other: object) -> bool:
@@ -94,14 +94,17 @@ class Vector2D:
 
     @property
     def magnitude(self) -> float:
+        """Euclidean length of the vector (L2 norm)."""
         return math.hypot(self.x, self.y)
 
     @property
     def theta(self) -> float:
+        """Angle in radians from the positive x-axis (via atan2)."""
         return math.atan2(self.y, self.x)
 
     @property
     def polar(self) -> tuple[float, float]:
+        """Return the vector as polar coordinates (r, theta)."""
         return self.magnitude, self.theta
 
     @classmethod
@@ -110,6 +113,7 @@ class Vector2D:
         return cls(radius * math.cos(theta), radius * math.sin(theta))
 
     def dot(self, other: Vector2DLike) -> float:
+        """Compute the dot product of `self` and `other`."""
         other_vec = self._coerce(other, name="other")
         return self.x * other_vec.x + self.y * other_vec.y
 
@@ -131,6 +135,7 @@ class Vector2D:
         return self / mag
 
     def projection_onto(self, other: Vector2DLike) -> Vector2D:
+        """Project `self` onto `other` (vector projection)."""
         other_vec = self._coerce(other, name="other")
         denom = other_vec.x**2 + other_vec.y**2
         if denom <= EPSILON**2:
@@ -139,6 +144,7 @@ class Vector2D:
         return Vector2D(other_vec.x * scale, other_vec.y * scale)
 
     def rejection_from(self, other: Vector2DLike) -> Vector2D:
+        """Return the component of `self` orthogonal to `other`."""
         return self - self.projection_onto(other)
 
     def component_along(self, other: Vector2DLike) -> float:
@@ -158,6 +164,7 @@ class Vector2D:
             signed: bool = True,
             degrees: bool = True
         ) -> float:
+        """Return the angle from `self` to `other`, signed by default."""
         other_vec = self._coerce(other, name="other")
         if self.magnitude <= EPSILON or other_vec.magnitude <= EPSILON:
             raise ValueError(
@@ -193,10 +200,12 @@ class Vector2D:
             *,
             degrees: bool = True
         ) -> float:
+        """Return the unsigned angle between `self` and `other`."""
         return self.angle_to(other, signed=False, degrees=degrees)
 
 
 def main():
+    """REPL that computes the sum, magnitude, and unit vector of two inputs."""
     print(
         "Calculate an output vector from two inputs. "
         "Separate dimensions with a comma"
@@ -222,11 +231,11 @@ def main():
             print(f"Magnitude: {new_mag:.3f}")
             print(f"Unit vector: {new_unit_vec:.2f}")
             break
-        except NumericTypeError as e:
-            print(f"Input error: {e}")
+        except NumericTypeError as exc:
+            print(f"Input error: {exc}")
             continue
-        except ValueError as e:
-            print(f"Invalid value: {e}")
+        except ValueError as exc:
+            print(f"Invalid value: {exc}")
             continue
 
 
