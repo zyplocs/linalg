@@ -40,6 +40,17 @@ class Vector2D:
         except TypeError:
             return NotImplemented
         return self.x == other_vec.x and self.y == other_vec.y
+    
+    def is_close(self, other: object, *, abs_tol: float = EPSILON) -> bool:
+        try:
+            other_vec = self._coerce(other, name="other")
+        except TypeError:
+            return False
+
+        return (
+            math.isclose(self.x, other_vec.x, rel_tol=0.0, abs_tol=abs_tol)
+            and math.isclose(self.y, other_vec.y, rel_tol=0.0, abs_tol=abs_tol)
+        )
 
     def __iter__(self):
         return iter((self.x, self.y))
