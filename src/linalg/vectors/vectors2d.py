@@ -31,16 +31,6 @@ class Vector2D:
                 f"not {type(other).__name__}"
             ) from exc
 
-    ## Dunders
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, (Vector2D, tuple)):
-            return NotImplemented
-        try:
-            other_vec = self._coerce(other, name="other")
-        except TypeError:
-            return NotImplemented
-        return self.x == other_vec.x and self.y == other_vec.y
-
     def is_close(self, other: object, *, abs_tol: float = EPSILON) -> bool:
         """Approximate equality comparison of two `Vector2D` objects."""
         try:
@@ -52,6 +42,16 @@ class Vector2D:
             math.isclose(self.x, other_vec.x, rel_tol=0.0, abs_tol=abs_tol)
             and math.isclose(self.y, other_vec.y, rel_tol=0.0, abs_tol=abs_tol)
         )
+
+    ## Dunders
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, (Vector2D, tuple)):
+            return NotImplemented
+        try:
+            other_vec = self._coerce(other, name="other")
+        except TypeError:
+            return NotImplemented
+        return self.x == other_vec.x and self.y == other_vec.y
 
     def __iter__(self):
         return iter((self.x, self.y))
@@ -84,9 +84,16 @@ class Vector2D:
         other_vec = self._coerce(other, name="other")
         return Vector2D(self.x + other_vec.x, self.y + other_vec.y)
 
+    def __radd__(self, other: Vector2DLike) -> Vector2D:
+        return self.__add__(other)
+
     def __sub__(self, other: Vector2DLike) -> Vector2D:
         other_vec = self._coerce(other, name="other")
         return Vector2D(self.x - other_vec.x, self.y - other_vec.y)
+
+    def __rsub__(self, other: Vector2DLike) -> Vector2D:
+        other_vec = self._coerce(other, name="other")
+        return Vector2D(other_vec.x - self.x, other_vec.y - self.y)
 
     def __mul__(self, scalar: ScalarLike) -> Vector2D:
         scal = gd.to_float(scalar, name="scalar")
