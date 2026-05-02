@@ -5,14 +5,16 @@ from __future__ import annotations
 from typing import SupportsFloat, TYPE_CHECKING
 from math import isfinite
 
+type ScalarLike = SupportsFloat | str
+
 if TYPE_CHECKING:
     try:
         from ..vectors.vectors2d import Vector2D
     except ImportError:
         from vectors2d import Vector2D
 
-type ScalarLike = SupportsFloat | str
-type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]  # pylint: disable=invalid-name
+    type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]  # pylint: disable=invalid-name
+
 
 class NumericTypeError(TypeError):
     """Raised when a numeric parameter receives a non-numeric argument."""

@@ -3,10 +3,15 @@
 
 from __future__ import annotations
 import math
+from typing import TYPE_CHECKING
 from ..utils import guards as gd
-from ..utils.guards import NumericTypeError, ScalarLike, Vector2DLike
+from ..utils.guards import NumericTypeError
+
+if TYPE_CHECKING:
+    from ..utils.guards import ScalarLike, Vector2DLike
 
 EPSILON = 1e-6  # zero threshold
+
 
 class Vector2D:
     """Represent a 2D vector with common operations."""
