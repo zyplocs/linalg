@@ -1,3 +1,6 @@
+# linalg/utils/guards.py
+"""Numeric coercion and input-guard utilities for linalg."""
+
 from __future__ import annotations
 from typing import SupportsFloat, TYPE_CHECKING
 from math import isfinite
@@ -9,13 +12,14 @@ if TYPE_CHECKING:
         from vectors2d import Vector2D
 
 type ScalarLike = SupportsFloat | str
-type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]
+type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]  # pylint: disable=invalid-name
 
 class NumericTypeError(TypeError):
     """Raised when a numeric parameter receives a non-numeric argument."""
 
 
 def to_float(usr_input: SupportsFloat | str, *, name: str) -> float:
+    """Coerce `usr_input` to float, rejecting bools, non-numerics, etc."""
     try:
         if isinstance(usr_input, bool):
             raise TypeError("Booleans are not accepted!")
@@ -34,10 +38,11 @@ def to_float(usr_input: SupportsFloat | str, *, name: str) -> float:
 
 
 def parse_vec2d(raw: str, label: str) -> Vector2D:
+    """Parse a comma-separated string into a `Vector2D`."""
     try:
-        from ..vectors.vectors2d import Vector2D
+        from ..vectors.vectors2d import Vector2D  # pylint: disable=import-outside-toplevel
     except ImportError:
-        from vectors2d import Vector2D
+        from vectors2d import Vector2D  # pylint: disable=import-outside-toplevel
 
     cleaned = raw.strip()
     if cleaned.startswith("(") and cleaned.endswith(")"):

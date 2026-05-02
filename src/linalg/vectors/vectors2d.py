@@ -40,8 +40,9 @@ class Vector2D:
         except TypeError:
             return NotImplemented
         return self.x == other_vec.x and self.y == other_vec.y
-    
+
     def is_close(self, other: object, *, abs_tol: float = EPSILON) -> bool:
+        """Approximate equality comparison of two `Vector2D` objects."""
         try:
             other_vec = self._coerce(other, name="other")
         except TypeError:
