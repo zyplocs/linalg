@@ -20,7 +20,7 @@ class NumericTypeError(TypeError):
     """Raised when a numeric parameter receives a non-numeric argument."""
 
 
-def to_float(usr_input: SupportsFloat | str, *, name: str) -> float:
+def to_float(usr_input: SupportsFloat | str, /, *, name: str) -> float:
     """Coerce `usr_input` to float, rejecting bools, non-numerics, etc."""
     try:
         if isinstance(usr_input, bool):

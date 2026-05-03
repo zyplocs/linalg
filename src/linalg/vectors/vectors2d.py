@@ -77,7 +77,7 @@ class Vector2D:
         return self.magnitude
 
     def __bool__(self) -> bool:
-        return self.magnitude > EPSILON
+        return self.x != 0.0 or self.y != 0.0
 
     def is_near_zero(self, *, abs_tol: float = EPSILON) -> bool:
         """Return True when the vector is within `abs_tol` of zero."""
@@ -138,6 +138,8 @@ class Vector2D:
     @classmethod
     def from_polar(cls, radius: float, theta: float) -> Vector2D:
         """Create a `Vector2D` from polar coordinates (r, theta)."""
+        radius = gd.to_float(radius, name="radius")
+        theta = gd.to_float(theta, name="theta")
         return cls(radius * math.cos(theta), radius * math.sin(theta))
 
     def dot(self, other: Vector2DLike) -> float:
