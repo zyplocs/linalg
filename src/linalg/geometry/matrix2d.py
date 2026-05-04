@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from dataclasses import dataclass
 
 from ..utils import guards as gd
-#from ..geometry.vectors2d import EPSILON, Vector2D
+from ..geometry.vectors2d import EPSILON, Vector2D
 
 if TYPE_CHECKING:
     from ..utils.guards import ScalarLike
@@ -38,6 +38,13 @@ class Mat2:
         object.__setattr__(self, "b", gd.to_float(b, name="b"))
         object.__setattr__(self, "c", gd.to_float(c, name="c"))
         object.__setattr__(self, "d", gd.to_float(d, name="d"))
+
+    def __matmul__(self, other: Mat2 | Vector2D) -> Mat2 | Vector2D:
+        if isinstance(other, Mat2):
+            return self.compose(other)
+        if isinstance(other, Vector2D):
+            return self.apply(other)
+        return NotImplemented
 
     @classmethod
     def identity(cls) -> Mat2:
@@ -85,3 +92,56 @@ class Mat2:
         the transpose is `[[a, c], [b, d]]`.
         """
         return Mat2(self.a, self.c, self.b, self.d)
+
+    def inverse(self) -> Mat2:
+        """
+        Return the inverse of this matrix.
+
+        The inverse of a 2x2 matrix `[[a, b], [c, d]]` is computed as
+        `(1/det) * [[d, -b], [-c, a]]`. Raises `ValueError` if the
+        determinant is near zero (singular matrix).
+        """
+        det = self.determinant
+        if abs(det) <= EPSILON:
+            raise ValueError("Cannot invert a near-singular matrix!")
+        return Mat2(self.d / det, -self.b / det, -self.c / det, self.a / det)
+
+    def apply(self, vec: Vector2D) -> Vector2D:
+        """
+        Apply this matrix transformation to a vector.
+
+        Computes the matrix-vector product, transforming the input
+        vector by this linear transformation.
+        """
+        return Vector2D(
+            self.a * vec.x + self.b * vec.y,
+            self.c * vec.x + self.d * vec.y,
+        )
+
+    def compose(self, other: Mat2) -> Mat2:
+        """
+        Return the composition of this matrix with another.
+
+        Computes `self @ other`, representing the transformation
+        `self(other(x))` — applying `other` first, then `self`.
+        """
+        return Mat2(
+            self.a * other.a + self.b * other.c,
+            self.a * other.b + self.b * other.d,
+            self.c * other.a + self.d * other.c,
+            self.c * other.b + self.d * other.d,
+        )
+
+    def is_close(self, other: Mat2, *, abs_tol: float = EPSILON) -> bool:
+        """
+        Approximate equality comparison of two `Mat2` objects.
+
+        Returns `True` if all corresponding elements are within
+        `abs_tol` of each other.
+        """
+        return (
+            math.isclose(self.a, other.a, rel_tol=0.0, abs_tol=abs_tol)
+            and math.isclose(self.b, other.b, rel_tol=0.0, abs_tol=abs_tol)
+            and math.isclose(self.c, other.c, rel_tol=0.0, abs_tol=abs_tol)
+            and math.isclose(self.d, other.d, rel_tol=0.0, abs_tol=abs_tol)
+        )
