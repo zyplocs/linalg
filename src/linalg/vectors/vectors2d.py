@@ -52,8 +52,6 @@ class Vector2D:
 
     ## Dunders
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, (Vector2D, tuple)):
-            return NotImplemented
         try:
             other_vec = self._coerce(other, name="other")
         except TypeError:
