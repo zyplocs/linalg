@@ -9,7 +9,7 @@ type ScalarLike = SupportsFloat | str
 
 if TYPE_CHECKING:
     try:
-        from ..vectors.vectors2d import Vector2D
+        from ..geometry.vectors2d import Vector2D
     except ImportError:
         from vectors2d import Vector2D
 

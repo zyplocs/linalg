@@ -1,7 +1,7 @@
 """Tests for src/linalg/vectors/vectors2d."""
 import pytest
 
-from linalg.vectors.vectors2d import Vector2D
+from linalg.geometry.vectors2d import Vector2D
 from linalg.utils.guards import NumericTypeError
 
 
