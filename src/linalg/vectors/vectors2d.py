@@ -24,6 +24,8 @@ class Vector2D:
     def _coerce(cls, other: Vector2DLike, name: str) -> Vector2D:
         if isinstance(other, cls):
             return other
+        if isinstance(other, (str, bytes)):
+            raise TypeError
         try:
             if len(other) != 2:
                 raise TypeError
@@ -32,7 +34,7 @@ class Vector2D:
             return cls(x, y)
         except (TypeError, IndexError) as exc:
             raise TypeError(
-                f"{name} must be a Vector2D or a tuple of two numbers, "
+                f"{name} must be a Vector2D or a 2-item numerical sequence, "
                 f"not {type(other).__name__}"
             ) from exc
 
@@ -136,11 +138,11 @@ class Vector2D:
         return self.magnitude, self.theta
 
     @classmethod
-    def from_polar(cls, radius: float, theta: float) -> Vector2D:
+    def from_polar(cls, radius: ScalarLike, theta: ScalarLike) -> Vector2D:
         """Create a `Vector2D` from polar coordinates (r, theta)."""
-        radius = gd.to_float(radius, name="radius")
-        theta = gd.to_float(theta, name="theta")
-        return cls(radius * math.cos(theta), radius * math.sin(theta))
+        r = gd.to_float(radius, name="radius")
+        angle = gd.to_float(theta, name="theta")
+        return cls(r * math.cos(angle), r * math.sin(angle))
 
     def dot(self, other: Vector2DLike) -> float:
         """Compute the dot product of `self` and `other`."""

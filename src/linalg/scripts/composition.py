@@ -9,6 +9,14 @@ from ..utils import guards as gd
 from ..utils.banners import banner
 from ..utils.guards import NumericTypeError
 
+class UserQuit(Exception):
+    """Raised when the user chooses to exit an interactive prompt."""
+
+def _read_or_quit(prompt: str) -> str:
+    value = input(prompt).strip()
+    if value.lower() in {"q", "quit", ""}:
+        raise UserQuit
+    return value
 
 class Mat2(NamedTuple):
     """A 2x2 matrix stored as four named scalars (a, b, c, d)."""
@@ -38,10 +46,10 @@ def mat_mul_mat(left: Mat2, right: Mat2) -> Mat2:
 
 def parse_mat2(label: str) -> Mat2:
     """Read two rows of interactive input and return a Mat2."""
-    row1_raw = input(f"> {label}, row 1: ").strip()
+    row1_raw = _read_or_quit(f"> {label}, row 1: ")
     row1 = gd.parse_vec2d(row1_raw, f"{label} row 1")
 
-    row2_raw = input(f"> {label}, row 2: ").strip()
+    row2_raw = _read_or_quit(f"> {label}, row 2: ")
     row2 = gd.parse_vec2d(row2_raw, f"{label} row 2")
 
     return Mat2(a=row1.x, b=row1.y, c=row2.x, d=row2.y)
@@ -106,6 +114,8 @@ def main():
         try:
             mat_a = parse_mat2("Matrix A")
             mat_b = parse_mat2("Matrix B")
+        except UserQuit:
+            break
         except NumericTypeError as exc:
             print(f"  Input error: {exc}")
             continue
