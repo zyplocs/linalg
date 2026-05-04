@@ -1,10 +1,11 @@
+# linalg/scripts/composition.py
 """Composition of linear transformations via 2x2 matrices."""
 
 from __future__ import annotations
 
 from typing import NamedTuple
 
-from ..vectors.vectors2d import Vector2D
+from ..geometry.vectors2d import Vector2D
 from ..utils import guards as gd
 from ..utils.banners import banner
 from ..utils.guards import NumericTypeError

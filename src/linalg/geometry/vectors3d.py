@@ -1,4 +1,4 @@
-# linalg/vectors/vectors3d.py
+# linalg/geometry/vectors3d.py
 """A module for working with vectors of three dimensions."""
 
 #from __future__ import annotations
