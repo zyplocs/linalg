@@ -3,12 +3,12 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple
-
 from ..geometry.vectors2d import Vector2D
+from ..geometry.matrix2d import Mat2
 from ..utils import guards as gd
 from ..utils.banners import banner
 from ..utils.guards import NumericTypeError
+
 
 class UserQuit(Exception):
     """Raised when the user chooses to exit an interactive prompt."""
@@ -18,32 +18,6 @@ def _read_or_quit(prompt: str) -> str:
     if value.lower() in {"q", "quit", ""}:
         raise UserQuit
     return value
-
-class Mat2(NamedTuple):
-    """A 2x2 matrix stored as four named scalars (a, b, c, d)."""
-    a: float
-    b: float
-    c: float
-    d: float
-
-    def __str__(self) -> str:
-        return f"[{self.a:.4f}  {self.b:.4f} | {self.c:.4f}  {self.d:.4f}]"
-
-def mat_mul_vec(mat: Mat2, vec: Vector2D) -> Vector2D:
-    """Return the product of a 2x2 matrix and a 2D vector."""
-    return Vector2D(
-        mat.a * vec.x + mat.b * vec.y,
-        mat.c * vec.x + mat.d * vec.y,
-    )
-
-def mat_mul_mat(left: Mat2, right: Mat2) -> Mat2:
-    """Return the product of two 2x2 matrices."""
-    return Mat2(
-        a=left.a * right.a + left.b * right.c,
-        b=left.a * right.b + left.b * right.d,
-        c=left.c * right.a + left.d * right.c,
-        d=left.c * right.b + left.d * right.d,
-    )
 
 def parse_mat2(label: str) -> Mat2:
     """Read two rows of interactive input and return a Mat2."""
@@ -75,9 +49,9 @@ def print_report(mat_a: Mat2, mat_b: Mat2, product_ab: Mat2) -> None:
     all_match = True
 
     for vec in TEST_VECTORS:
-        bx = mat_mul_vec(mat_b, vec)
-        sequential = mat_mul_vec(mat_a, bx)
-        composed = mat_mul_vec(product_ab, vec)
+        bx = mat_b @ vec
+        sequential = mat_a @ bx
+        composed = product_ab @ vec
 
         matching = sequential.is_close(composed)
         tag = "match" if matching else "MISMATCH"
@@ -124,7 +98,7 @@ def main():
             print(f"  Invalid value: {exc}")
             continue
 
-        product_ab = mat_mul_mat(mat_a, mat_b)
+        product_ab = mat_a @ mat_b
         print_report(mat_a, mat_b, product_ab)
 
         again = input("\nAnother pair? (y/n): ").strip().lower()
