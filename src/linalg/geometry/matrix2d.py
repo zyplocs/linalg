@@ -39,6 +39,9 @@ class Mat2:
         object.__setattr__(self, "c", gd.to_float(c, name="c"))
         object.__setattr__(self, "d", gd.to_float(d, name="d"))
 
+    def __str__(self) -> str:
+        return f"[{self.a:.4f}  {self.b:.4f} | {self.c:.4f}  {self.d:.4f}]"
+
     def __matmul__(self, other: Mat2 | Vector2D) -> Mat2 | Vector2D:
         if isinstance(other, Mat2):
             return self.compose(other)
