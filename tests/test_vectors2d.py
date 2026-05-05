@@ -5,6 +5,41 @@ from linalg.geometry.vectors2d import Vector2D
 from linalg.utils.guards import NumericTypeError
 
 
+## Constructor & input guard tests
+def test_constructor_coerces_int_and_string_to_float():
+    """Components are stores as float regardless of input type."""
+    v = Vector2D(3, "4")
+    assert v.x == 3.0 and isinstance(v.x, float)
+    assert v.y == 4.0 and isinstance(v.y, float)
+
+def test_constructor_rejects_bools():
+    """Booleans are not numeric; to_float raises NumericTypeError."""
+    with pytest.raises(NumericTypeError):
+        Vector2D(True, 0)
+
+def test_constructor_rejects_non_finite():
+    """Infinity and NaN are caught by to_float's finiteness guard."""
+    with pytest.raises(ValueError):
+        Vector2D(float("inf"), 0)
+    with pytest.raises(ValueError):
+        Vector2D(0, float("nan"))
+
+
+## String representation tests
+def test_repr_round_trips():
+    """__repr__ produces the 'Vector2D(x, y)' form."""
+    v = Vector2D(1, 2)
+    assert repr(v) == "Vector2D(1.0, 2.0)"
+
+def test_str_uses_parenthesized_form():
+    """__str__ gives the short '(x, y)' form."""
+    assert str(Vector2D(3, 4)) == "(3.0, 4.0)"
+
+def test_format_applies_spec_to_each_component():
+    """__format__ passes the format spec through to both x and y."""
+    assert f"{Vector2D(1.456, 2.789):.1f}" == "(1.5, 2.8)"
+
+
 def test_bool_is_only_false_for_exact_zero():
     """__bool__ returns False only for the exact zero vector."""
     assert not Vector2D(0, 0)
