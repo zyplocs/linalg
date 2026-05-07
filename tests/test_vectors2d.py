@@ -7,7 +7,7 @@ from linalg.utils.guards import NumericTypeError
 
 ## Constructor & input guard tests
 def test_constructor_coerces_int_and_string_to_float():
-    """Components are stores as float regardless of input type."""
+    """Components are stored as float regardless of input type."""
     v = Vector2D(3, "4")
     assert v.x == 3.0 and isinstance(v.x, float)
     assert v.y == 4.0 and isinstance(v.y, float)
@@ -38,6 +38,29 @@ def test_str_uses_parenthesized_form():
 def test_format_applies_spec_to_each_component():
     """__format__ passes the format spec through to both x and y."""
     assert f"{Vector2D(1.456, 2.789):.1f}" == "(1.5, 2.8)"
+
+
+## Sequence-protocol dunder tests
+def test_len_is_always_two():
+    """__len__ returns 2 for any Vector2D."""
+    assert len(Vector2D(0, 0)) == 2
+
+def test_getitem_accesses_components_by_index():
+    """__getitem__ supports 0, 1, and negative indices."""
+    v = Vector2D(3, 7)
+    assert v[0] == 3.0
+    assert v[1] == 7.0
+    assert v[-1] == 7.0
+
+def test_getitem_raises_for_out_of_bounds():
+    """Indexing beyond 0-1 raises IndexError."""
+    with pytest.raises(IndexError):
+        _ = Vector2D(1, 2)[2]
+
+def test_iter_yields_components():
+    """__iter__ unpacks into (x, y)."""
+    x, y = Vector2D(5, 6)
+    assert (x, y) == (5.0, 6.0)
 
 
 def test_bool_is_only_false_for_exact_zero():
