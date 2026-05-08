@@ -77,6 +77,33 @@ def test_round_truncates_to_n_digits():
     assert round(Vector2D(1.456, 2.789), 1) == Vector2D(1.5, 2.8)
 
 
+## Arithmetic tests
+def test_add_two_vectors():
+    """Component-wise addition of two Vector2D objects."""
+    assert Vector2D(1, 2) + Vector2D(3, 4) == Vector2D(4, 6)
+
+def test_add_vector_and_tuple():
+    """__add__ coerces a 2-tuple on the right-hand side."""
+    assert Vector2D(1, 2) + (3, 4) == Vector2D(4, 6)
+
+def test_radd_tuple_plus_vector():
+    """__radd__ lets a tuple appear on the left-hand side."""
+    assert (3, 4) + Vector2D(1, 2) == Vector2D(4, 6)
+
+def test_sub_two_vectors():
+    """Component-wise subtraction."""
+    assert Vector2D(5, 7) - Vector2D(2, 3) == Vector2D(3, 4)
+
+def test_rsub_tuple_minus_vector():
+    """__rsub__ computes other - self (not self - other)."""
+    result = (10, 10) - Vector2D(3, 4)
+    assert result == Vector2D(7, 6)
+
+def test_mul_scales_both_components():
+    """Scalar multiplication scales x and y uniformly."""
+    assert Vector2D(2, 3) * 4 == Vector2D(8, 12)
+
+
 def test_bool_is_only_false_for_exact_zero():
     """__bool__ returns False only for the exact zero vector."""
     assert not Vector2D(0, 0)
