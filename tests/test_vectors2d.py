@@ -63,6 +63,20 @@ def test_iter_yields_components():
     assert (x, y) == (5.0, 6.0)
 
 
+## Unary operation tests
+def test_neg_flips_both_components():
+    """Negation reverses the sign of x and y."""
+    assert -Vector2D(3, -4) == Vector2D(-3, 4)
+
+def test_abs_returns_magnitude():
+    """__abs__ delegates to the magnitude property."""
+    assert abs(Vector2D(3, 4)) == 5.0
+
+def test_round_truncates_to_n_digits():
+    """__round__ rounds each component independently."""
+    assert round(Vector2D(1.456, 2.789), 1) == Vector2D(1.5, 2.8)
+
+
 def test_bool_is_only_false_for_exact_zero():
     """__bool__ returns False only for the exact zero vector."""
     assert not Vector2D(0, 0)
