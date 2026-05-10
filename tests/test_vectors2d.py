@@ -1,4 +1,5 @@
 """Tests for src/linalg/vectors/vectors2d."""
+import math
 import pytest
 
 from linalg.geometry.vectors2d import Vector2D
@@ -76,6 +77,16 @@ def test_round_truncates_to_n_digits():
     """__round__ rounds each component independently."""
     assert round(Vector2D(1.456, 2.789), 1) == Vector2D(1.5, 2.8)
 
+def test_bool_is_only_false_for_exact_zero():
+    """__bool__ returns False only for the exact zero vector."""
+    assert not Vector2D(0, 0)
+    assert Vector2D(1e-7, 0)
+
+def test_equality_matches_general_two_item_sequences():
+    """__eq__ accepts any 2-item numeric sequence, not just tuples."""
+    assert Vector2D(1, 2) == (1, 2)
+    assert Vector2D(1, 2) == [1, 2]
+
 
 ## Arithmetic tests
 def test_add_two_vectors():
@@ -90,6 +101,11 @@ def test_radd_tuple_plus_vector():
     """__radd__ lets a tuple appear on the left-hand side."""
     assert (3, 4) + Vector2D(1, 2) == Vector2D(4, 6)
 
+def test_vector_coercion_rejects_plain_strings():
+    """Arithmetic with a bare string raises TypeError, not coercion."""
+    with pytest.raises(TypeError):
+        _ = Vector2D(1, 2) + "12"
+
 def test_sub_two_vectors():
     """Component-wise subtraction."""
     assert Vector2D(5, 7) - Vector2D(2, 3) == Vector2D(3, 4)
@@ -103,16 +119,48 @@ def test_mul_scales_both_components():
     """Scalar multiplication scales x and y uniformly."""
     assert Vector2D(2, 3) * 4 == Vector2D(8, 12)
 
+def test_rmul_scalar_on_left():
+    """__rmul__ lets the scalar appear on the left side."""
+    assert 2 * Vector2D(3, 8) == Vector2D(6, 16)
 
-def test_bool_is_only_false_for_exact_zero():
-    """__bool__ returns False only for the exact zero vector."""
-    assert not Vector2D(0, 0)
-    assert Vector2D(1e-7, 0)
+def test_truediv_divides_components():
+    """Scalar division divides each component."""
+    assert Vector2D(8, 4) / 4 == Vector2D(2, 1)
+
+def test_truediv_raises_for_near_zero_divisor():
+    """Division by a near-zero scalar raises ValueError."""
+    with pytest.raises(ValueError):
+        _ = Vector2D(1, 2) / 0
+
+
+## Properties
+def test_magnitude_of_3_4_is_5():
+    """Classic 3-4-5 Pythagorean triple."""
+    assert Vector2D(3, 4).magnitude == 5.0
+
+def test_magnitude_of_zero_vector_is_zero():
+    """The zero vector has magnitude 0."""
+    assert Vector2D(0, 0).magnitude == 0.0
+
+def test_theta_along_positive_x_is_zero():
+    """A vector along +x has angle 0."""
+    assert Vector2D(1, 0).theta == 0.0
+
+def test_theta_along_positive_y_is_half_pi():
+    """A vector along +y has angle pi/2."""
+    assert math.isclose(Vector2D(0, 1).theta, math.pi / 2)
 
 def test_is_near_zero_uses_epsilon_threshold():
     """is_near_zero returns True when magnitude is below epsilon."""
     assert Vector2D(1e-7, 0).is_near_zero()
     assert not Vector2D(1e-3, 0).is_near_zero()
+
+def test_polar_round_trips_with_from_polar():
+    """polar property decomposes; from_polar recomposes."""
+    v = Vector2D(3, 4)
+    r, angle = v.polar
+    reconstructed = Vector2D.from_polar(r, angle)
+    assert v.is_close(reconstructed)
 
 def test_from_polar_uses_same_numeric_guards_as_constructor():
     """from_polar rejects bools and non-finite values like the constructor."""
@@ -126,12 +174,13 @@ def test_from_polar_accepts_numeric_strings():
     """from_polar coerces numeric strings to float via to_float."""
     assert Vector2D.from_polar("2", "0") == Vector2D(2, 0)
 
-def test_vector_coercion_rejects_plain_strings():
-    """Arithmetic with a bare string raises TypeError, not coercion."""
-    with pytest.raises(TypeError):
-        _ = Vector2D(1, 2) + "12"
 
-def test_equality_matches_general_two_item_sequences():
-    """__eq__ accepts any 2-item numeric sequence, not just tuples."""
-    assert Vector2D(1, 2) == (1, 2)
-    assert Vector2D(1, 2) == [1, 2]
+## Dot & cross product tests
+def test_dot_product_of_perpendicular_vectors_is_zero():
+    """Orthogonal vectors have zero dot product."""
+    assert Vector2D(1, 0).dot(Vector2D(0, 1)) == 0.0
+
+def test_dot_product_of_parallel_vectors():
+    """Parallel vectors: dot(v, v) == magnitude^2."""
+    v = Vector2D(4, 6)
+    assert math.isclose(v.dot(v), v.magnitude**2)
