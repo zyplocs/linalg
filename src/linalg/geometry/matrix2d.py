@@ -8,7 +8,8 @@ from typing import TYPE_CHECKING
 from dataclasses import dataclass
 
 from ..utils import guards as gd
-from ..geometry.vectors2d import EPSILON, Vector2D
+from ..utils.guards import EPSILON
+from ..geometry.vectors2d import Vector2D
 
 if TYPE_CHECKING:
     from ..utils.guards import ScalarLike

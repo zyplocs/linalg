@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
     type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]  # pylint: disable=invalid-name
 
+EPSILON: float = 1e-6  # zero threshold for near-zero comparisons
+
 
 class NumericTypeError(TypeError):
     """Raised when a numeric parameter receives a non-numeric argument."""
