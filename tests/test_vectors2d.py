@@ -6,7 +6,7 @@ from linalg.geometry.vectors2d import Vector2D
 from linalg.utils.guards import NumericTypeError
 
 
-## Constructor & input guard tests
+## Constructor & input guard tests ––––––––––––––––––––––––
 def test_constructor_coerces_int_and_string_to_float():
     """Components are stored as float regardless of input type."""
     v = Vector2D(3, "4")
@@ -26,7 +26,7 @@ def test_constructor_rejects_non_finite():
         Vector2D(0, float("nan"))
 
 
-## String representation tests
+## String representation tests ––––––––––––––––––––––––––––
 def test_repr_round_trips():
     """__repr__ produces the 'Vector2D(x, y)' form."""
     v = Vector2D(1, 2)
@@ -41,7 +41,7 @@ def test_format_applies_spec_to_each_component():
     assert f"{Vector2D(1.456, 2.789):.1f}" == "(1.5, 2.8)"
 
 
-## Sequence-protocol dunder tests
+## Sequence-protocol dunder tests –––––––––––––––––––––––––
 def test_len_is_always_two():
     """__len__ returns 2 for any Vector2D."""
     assert len(Vector2D(0, 0)) == 2
@@ -64,7 +64,7 @@ def test_iter_yields_components():
     assert (x, y) == (5.0, 6.0)
 
 
-## Unary operation tests
+## Unary operation tests ––––––––––––––––––––––––––––––––––
 def test_neg_flips_both_components():
     """Negation reverses the sign of x and y."""
     assert -Vector2D(3, -4) == Vector2D(-3, 4)
@@ -88,7 +88,7 @@ def test_equality_matches_general_two_item_sequences():
     assert Vector2D(1, 2) == [1, 2]
 
 
-## Arithmetic tests
+## Arithmetic tests –––––––––––––––––––––––––––––––––––––––
 def test_add_two_vectors():
     """Component-wise addition of two Vector2D objects."""
     assert Vector2D(1, 2) + Vector2D(3, 4) == Vector2D(4, 6)
@@ -133,7 +133,7 @@ def test_truediv_raises_for_near_zero_divisor():
         _ = Vector2D(1, 2) / 0
 
 
-## Properties
+## Property tests –––––––––––––––––––––––––––––––––––––––––
 def test_magnitude_of_3_4_is_5():
     """Classic 3-4-5 Pythagorean triple."""
     assert Vector2D(3, 4).magnitude == 5.0
@@ -175,7 +175,7 @@ def test_from_polar_accepts_numeric_strings():
     assert Vector2D.from_polar("2", "0") == Vector2D(2, 0)
 
 
-## Dot & cross product tests
+## Dot & cross product tests ––––––––––––––––––––––––––––––
 def test_dot_product_of_perpendicular_vectors_is_zero():
     """Orthogonal vectors have zero dot product."""
     assert Vector2D(1, 0).dot(Vector2D(0, 1)) == 0.0
@@ -184,3 +184,141 @@ def test_dot_product_of_parallel_vectors():
     """Parallel vectors: dot(v, v) == magnitude^2."""
     v = Vector2D(4, 6)
     assert math.isclose(v.dot(v), v.magnitude**2)
+
+def test_cross_product_of_parallel_vectors_is_zero():
+    """Parallel (or anti-parallel) vectors have zero cross product."""
+    assert Vector2D(2, 4).cross(Vector2D(1, 2)) == 0.0
+
+def test_cross_product_of_basis_vectors():
+    """x-hat cross y-hat == 1 (positive orientation)."""
+    assert Vector2D(1, 0).cross(Vector2D(0, 1)) == 1.0
+
+def test_dot_accepts_tuple():
+    """dot coerces a 2-tuple via _coerce."""
+    assert Vector2D(2, 3).dot((4, 5)) == 23.0
+
+
+## Normalization tests ––––––––––––––––––––––––––––––––––––
+def test_normalize_returns_unit_vector():
+    """The normalized vector has magnitude 1."""
+    unit = Vector2D(3, 4).normalize()
+    assert math.isclose(unit.magnitude, 1.0)
+
+def test_normalize_preserves_direction():
+    """Normalizing doesn't change the angle."""
+    v = Vector2D(3, 4)
+    assert math.isclose(v.normalize().theta, v.theta)
+
+def test_normalize_raises_for_zero_vector():
+    """Cannot normalize a zero-length vector."""
+    with pytest.raises(ValueError):
+        Vector2D(0, 0).normalize()
+
+
+## Projection, rejection & component tests ––––––––––––––––
+def test_projection_onto_axis():
+    """Projecting (3,4) onto the x-axis yields (3,0)."""
+    proj = Vector2D(3, 4).projection_onto(Vector2D(1, 0))
+    assert proj == Vector2D(3, 0)
+
+def test_rejection_is_orthogonal_complement():
+    """rejection = original - projection, orthogonal to the target."""
+    v = Vector2D(3, 4)
+    axis = Vector2D(1, 0)
+    rej = v.rejection_from(axis)
+    assert rej == Vector2D(0, 4)
+
+def test_projection_plus_rejection_equals_original():
+    """The projection and rejection sum back to the original vector."""
+    v = Vector2D(3, 4)
+    onto = Vector2D(1, 1)
+    assert v.is_close(v.projection_onto(onto) + v.rejection_from(onto))
+
+def test_projection_onto_zero_vector_raises():
+    """Cannot project onto a near-zero vector."""
+    with pytest.raises(ValueError):
+        Vector2D(1, 2).projection_onto(Vector2D(0, 0))
+
+def test_component_along_axis():
+    """Scalar component of (3,4) along x-axis is 3."""
+    assert Vector2D(3, 4).component_along(Vector2D(1, 0)) == 3.0
+
+def test_component_along_zero_vector_raises():
+    """Cannot compute scalar component along a near-zero vector."""
+    with pytest.raises(ValueError):
+        Vector2D(1, 2).component_along(Vector2D(0, 0))
+
+
+## Angle tests ––––––––––––––––––––––––––––––––––––––––––––
+def test_angle_to_perpendicular_vectors_is_90_degrees():
+    """Signed angle from +x to +y is 90 degrees."""
+    angle = Vector2D(1, 0).angle_to(Vector2D(0, 1))
+    assert math.isclose(angle, 90.0)
+
+def test_angle_to_signed_can_be_negative():
+    """Signed angle from +y to +x is -90 degrees (clockwise)."""
+    angle = Vector2D(0, 1).angle_to(Vector2D(1, 0))
+    assert math.isclose(angle, -90.0)
+
+def test_angle_to_unsigned():
+    """Unsigned angle between +y and +x is 90 (never negative)."""
+    angle = Vector2D(0, 1).angle_to(Vector2D(1, 0), signed=False)
+    assert math.isclose(angle, 90.0)
+
+def test_angle_to_in_radians():
+    """Passing degrees=False returns radians."""
+    angle = Vector2D(1, 0).angle_to(Vector2D(0, 1), degrees=False)
+    assert math.isclose(angle, math.pi / 2)
+
+def test_angle_to_raises_for_zero_vector():
+    """Angle is undefined for a zero-magnitude operand."""
+    with pytest.raises(ValueError):
+        Vector2D(0, 0).angle_to(Vector2D(1, 0))
+    with pytest.raises(ValueError):
+        Vector2D(1, 0).angle_to(Vector2D(0, 0))
+
+def test_angle_between_delegates_unsigned():
+    """angle_between is a convenience for angle_to(signed=False)."""
+    a, b = Vector2D(1, 0), Vector2D(-1, 1)
+    assert math.isclose(
+        a.angle_between(b),
+        a.angle_to(b, signed=False),
+    )
+
+
+## Rotation tests –––––––––––––––––––––––––––––––––––––––––
+def test_rotate_90_degrees():
+    """Rotating (1,0) by 90 degrees CCW gives (0,1)."""
+    rotated = Vector2D(1, 0).rotate(90)
+    assert rotated.is_close(Vector2D(0, 1))
+
+def test_rotate_in_radians():
+    """degrees=False uses the angle directly as radians."""
+    rotated = Vector2D(1, 0).rotate(math.pi / 2, degrees=False)
+    assert rotated.is_close(Vector2D(0, 1))
+
+def test_rotate_360_returns_to_original():
+    """A full revolution is the identity transformation."""
+    v = Vector2D(3, 4)
+    assert v.is_close(v.rotate(360))
+
+
+## Some edge cases ––––––––––––––––––––––––––––––––––––––––
+def test_is_close_within_epsilon():
+    """Vectors differing by less than EPSILON are considered close."""
+    v1 = Vector2D(1, 2)
+    v2 = Vector2D(1 + 1e-9, 2)
+    assert v1.is_close(v2)
+
+def test_is_close_outside_epsilon():
+    """Vectors differing by more than EPSILON are not close."""
+    assert not Vector2D(1, 2).is_close(Vector2D(1.1, 2))
+
+def test_is_close_returns_false_for_non_coercible():
+    """is_close returns False (not an error) for incompatible types."""
+    assert not Vector2D(1, 2).is_close("not a vector")
+
+def test_eq_returns_not_implemented_for_incompatible_type():
+    """Comparing to a non-coercible type doesn't raise — returns False."""
+    assert Vector2D(1, 2) != "nope"
+    assert Vector2D(1, 2) != 42
