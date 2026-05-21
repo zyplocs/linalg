@@ -31,6 +31,7 @@ class Display:
     size_cm: tuple[float, float]
     viewing_distance_cm: float
 
+    ## Properties
     @property
     def pix_per_cm(self) -> tuple[float, float]:
         """Pixels per centimeter (horizontal, vertical)."""
@@ -65,3 +66,14 @@ class Display:
         """Degrees of visual angle per pixel (horizontal, vertical)."""
         ppd = self.pix_per_deg
         return (1.0 / ppd[0], 1.0 / ppd[1])
+
+    ## Methods
+    def pix_to_deg(self, pixels: float, *, axis: int = 0) -> float:
+        """Convert a distance in pixels to degrees of visual angle."""
+        size_cm = pixels * self.cm_per_pix[axis]
+        return cm_to_deg(size_cm, self.viewing_distance_cm)
+
+    def deg_to_pix(self, angle_deg: float, *, axis: int = 0) -> float:
+        """Convert degrees of visual angle to pixels."""
+        size_cm = deg_to_cm(angle_deg, self.viewing_distance_cm)
+        return size_cm * self.pix_per_cm[axis]
