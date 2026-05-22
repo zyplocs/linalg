@@ -1,2 +1,2 @@
-# linalg/scripts/__init__.py
+# src/eyesee/scripts/__init__.py
 """Practice implementations of concepts."""

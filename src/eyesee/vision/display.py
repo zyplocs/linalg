@@ -1,4 +1,4 @@
-# src/linalg/vision/display.py
+# src/eyesee/vision/display.py
 """Display specification and visual-angle conversions."""
 
 from __future__ import annotations

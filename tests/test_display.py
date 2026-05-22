@@ -1,11 +1,11 @@
 # tests/test_display.py
-"""Tests for src/linalg/vision/display."""
+"""Tests for src/eyesee/vision/display."""
 # pylint: disable=redefined-outer-name
 
 import math
 import pytest
 
-from linalg.vision.display import Display, cm_to_deg, deg_to_cm
+from eyesee.vision.display import Display, cm_to_deg, deg_to_cm
 
 
 ## Standalone function tests ––––––––––––––––––––––––––––––

@@ -1,9 +1,9 @@
-"""Tests for src/linalg/vectors/vectors2d."""
+"""Tests for src/eyesee/vectors/vectors2d."""
 import math
 import pytest
 
-from linalg.geometry.vectors2d import Vector2D
-from linalg.utils.guards import NumericTypeError
+from eyesee.geometry.vectors2d import Vector2D
+from eyesee.utils.guards import NumericTypeError
 
 
 ## Constructor & input guard tests ––––––––––––––––––––––––

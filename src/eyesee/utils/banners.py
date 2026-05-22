@@ -1,3 +1,4 @@
+# src/eyesee/utils/banners.py
 """Small reusable banner printer for exercises and scripts."""
 
 def banner(title: str) -> None:

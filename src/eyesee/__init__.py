@@ -1,4 +1,4 @@
-# linalg/__init__.py
+# eyesee/__init__.py
 """Linear Algebra for Visual Applications"""
 
 from .geometry.vectors2d import Vector2D

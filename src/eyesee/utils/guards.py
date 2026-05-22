@@ -1,4 +1,4 @@
-# linalg/utils/guards.py
+# src/eyesee/utils/guards.py
 """Numeric coercion and input-guard utilities for linalg."""
 
 from __future__ import annotations

@@ -1,4 +1,4 @@
-# linalg/scripts/composition.py
+# src/eyesee/scripts/composition.py
 """Composition of linear transformations via 2x2 matrices."""
 
 from __future__ import annotations

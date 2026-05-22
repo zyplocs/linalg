@@ -1,4 +1,4 @@
-# src/linalg/geometry/matrix2d.py
+# src/eyesee/geometry/matrix2d.py
 """2x2 matrices for planar linear transformations."""
 
 from __future__ import annotations
