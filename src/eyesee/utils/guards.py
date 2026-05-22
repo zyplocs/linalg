@@ -9,9 +9,9 @@ type ScalarLike = SupportsFloat | str
 
 if TYPE_CHECKING:
     try:
-        from ..geometry.vectors2d import Vector2D
+        from ..geometry.vector2d import Vector2D
     except ImportError:
-        from vectors2d import Vector2D
+        from vector2d import Vector2D
 
     type Vector2DLike = Vector2D | tuple[ScalarLike, ScalarLike]  # pylint: disable=invalid-name
 
@@ -44,9 +44,9 @@ def to_float(usr_input: SupportsFloat | str, /, *, name: str) -> float:
 def parse_vec2d(raw: str, label: str) -> Vector2D:
     """Parse a comma-separated string into a `Vector2D`."""
     try:
-        from ..vectors.vectors2d import Vector2D  # pylint: disable=import-outside-toplevel
+        from ..geometry.vector2d import Vector2D  # pylint: disable=import-outside-toplevel
     except ImportError:
-        from vectors2d import Vector2D  # pylint: disable=import-outside-toplevel
+        from vector2d import Vector2D  # pylint: disable=import-outside-toplevel
 
     cleaned = raw.strip()
     if cleaned.startswith("(") and cleaned.endswith(")"):

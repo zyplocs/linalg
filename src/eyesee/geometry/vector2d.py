@@ -1,4 +1,4 @@
-# src/eyesee/geometry/vectors2d.py
+# src/eyesee/geometry/vector2d.py
 """A module for working with vectors of two dimensions."""
 
 from __future__ import annotations

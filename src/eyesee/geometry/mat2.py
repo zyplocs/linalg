@@ -1,4 +1,4 @@
-# src/eyesee/geometry/matrix2d.py
+# src/eyesee/geometry/mat2.py
 """2x2 matrices for planar linear transformations."""
 
 from __future__ import annotations
@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 from ..utils import guards as gd
 from ..utils.guards import EPSILON
-from ..geometry.vectors2d import Vector2D
+from ..geometry.vector2d import Vector2D
 
 if TYPE_CHECKING:
     from ..utils.guards import ScalarLike

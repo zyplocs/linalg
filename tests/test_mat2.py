@@ -1,10 +1,10 @@
-"""Tests for src/eyesee/geometry/matrix2d."""
+"""Tests for src/eyesee/geometry/mat2.py"""
 import math
 
 import pytest
 
-from eyesee.geometry.matrix2d import Mat2
-from eyesee.geometry.vectors2d import Vector2D
+from eyesee.geometry.mat2 import Mat2
+from eyesee.geometry.vector2d import Vector2D
 from eyesee.utils.guards import NumericTypeError
 
 

@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-from ..geometry.vectors2d import Vector2D
-from ..geometry.matrix2d import Mat2
+from ..geometry.vector2d import Vector2D
+from ..geometry.mat2 import Mat2
 from ..utils import guards as gd
 from ..utils.banners import banner
 from ..utils.guards import NumericTypeError

@@ -1,8 +1,8 @@
 # eyesee/__init__.py
 """Linear Algebra for Visual Applications"""
 
-from .geometry.vectors2d import Vector2D
-from .geometry.matrix2d import Mat2
+from .geometry.vector2d import Vector2D
+from .geometry.mat2 import Mat2
 from .utils.guards import NumericTypeError
 from . import vision
 
