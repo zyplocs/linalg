@@ -1,5 +1,6 @@
 # tests/test_display.py
 """Tests for src/linalg/vision/display."""
+# pylint: disable=redefined-outer-name
 
 import math
 import pytest
@@ -36,13 +37,13 @@ def standard_display() -> Display:
         viewing_distance_cm=57.0,
     )
 
-def test_pix_per_cm(standard_display):  # pylint: disable=redefined-outer-name
+def test_pix_per_cm(standard_display):
     """Pixel density matches resolution / physical size."""
     h, v = standard_display.pix_per_cm
     assert math.isclose(h, 1920 / 53.0)
     assert math.isclose(v, 1080 / 30.0)
 
-def test_pix_to_deg_round_trips(standard_display):  # pylint: disable=redefined-outer-name
+def test_pix_to_deg_round_trips(standard_display):
     """Converting pixels -> deg -> pixels recovers the original."""
     original_px = 100.0
     deg = standard_display.pix_to_deg(original_px)
